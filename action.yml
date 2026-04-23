@@ -1,0 +1,49 @@
+name: Maven Deploy
+description: Composite GitHub Action that deploys Maven artifacts.
+
+inputs:
+  java-version:
+    description: Java version
+    required: true
+  java-distribution:
+    description: Java distribution
+    required: false
+    default: temurin
+  maven-executable:
+    description: Maven executable
+    required: false
+    default: mvn    
+  maven-deploy-args:
+    description: Maven goals and command line parameter to deploy the build
+    required: false
+    default: -s ./.maven-settings.xml -Pcontinuous-integration -B -U clean deploy
+  maven-additional-args:
+    description: Additional maven goals or command line parameters to be added to all maven calls
+    required: false
+  sonatype-username:
+    description: SONATYPE_USERNAME secret
+    required: true
+  sonatype-password:
+    description: SONATYPE_PASSWORD secret
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        cache: maven
+
+    - name: Build, verify, deploy, generate site
+      env:
+        SONATYPE_USERNAME: ${{ inputs.sonatype-usernam }}
+        SONATYPE_PASSWORD: ${{ inputs.sonatype-password }}
+      run: ${{ inputs.maven-executable }} ${{ inputs.maven-deploy-args }} ${{ inputs.maven-additional-args }}
+      shell: bash
