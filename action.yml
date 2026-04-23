@@ -43,7 +43,7 @@ runs:
 
     - name: Build, verify, deploy, generate site
       env:
-        SONATYPE_USERNAME: ${{ inputs.sonatype-usernam }}
+        SONATYPE_USERNAME: ${{ inputs.sonatype-username }}
         SONATYPE_PASSWORD: ${{ inputs.sonatype-password }}
       run: ${{ inputs.maven-executable }} ${{ inputs.maven-deploy-args }} ${{ inputs.maven-additional-args }}
       shell: bash
