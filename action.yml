@@ -41,7 +41,7 @@ runs:
         java-version: ${{ inputs.java-version }}
         cache: maven
 
-    - name: Build, verify, deploy, generate site
+    - name: Build and deploy
       env:
         SONATYPE_USERNAME: ${{ inputs.sonatype-username }}
         SONATYPE_PASSWORD: ${{ inputs.sonatype-password }}
